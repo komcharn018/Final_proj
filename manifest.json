@@ -1,0 +1,24 @@
+{
+    "name": "Thai News Headlines Analysis",
+    "version": "1.0.0",
+    "description": "google extension that will help us to predict the Thai headnews",
+    "manifest_version": 3,
+    "author": "Komcharn & Pollachaet",
+    "action":{
+        "default_popup": "popup.html",
+        "default_title": "Thai news headlines analysis"
+    },
+    "host_permissions": [
+        "http://127.0.0.1:5000/"
+    ],
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["popup.js"],
+            "matches": ["http://*/*", "https://*/*"]
+        }
+    ]
+}
