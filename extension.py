@@ -77,10 +77,11 @@ class ThaiTokenizer(BaseEstimator, TransformerMixin):
 load_model = pickle.load(open('LinearSVM.pkl', 'rb'))
 
 def starts_with_thai_vowel(text):
-    # Regular expression pattern to match sentences starting with Thai vowels
     pattern = r'^([' + thvo + '])'
-    
-    # Check if the sentence matches the pattern
+    return bool(re.match(pattern, text))
+
+def contain_thai_vowel(text):
+    pattern = r'([' + thvo + '])'
     return bool(re.match(pattern, text))
 
 def stemming(content):
@@ -111,24 +112,6 @@ def get_word_embeddings(tokens):
     embeddings = [model[word] for word in tokens if word in model]
     return embeddings
 
-# def aggregate_embeddings(embeddings):
-#     if embeddings:
-#         return sum(embeddings) / len(embeddings)
-#     else:
-#         return None
-
-# def fake_news(news):
-#     input_data = [news]
-#     embed_news = []
-
-#     for document in input_data:
-#         tokens = word_tokenize(document)
-#         embeddings = get_word_embeddings(tokens)
-#         document_embedding = aggregate_embeddings(embeddings)
-#         embed_news.append(document_embedding)
-#         prediction = load_model.predict(embed_news)
-#     return prediction
-
 def fake_news(news):
     TfidfVectorizer()
     TfidfTransformer()
@@ -147,8 +130,8 @@ def predict():
         if not news_content:
             return jsonify({'error': 'Please enter some text for analysis'})
         
-        if any(char.isascii() and char.isalpha() for char in news_content):
-            return jsonify({'error': 'Rejected: The text should be Thai alphabet characters.'})
+        if all(char.isascii() and char.isalpha() for char in news_content):
+            return jsonify({'error': 'Rejected: The sentence should not contain only English'})
         
         if contains_only_numbers(news_content):
             return jsonify({'error': 'Input should not contain only numbers'})
